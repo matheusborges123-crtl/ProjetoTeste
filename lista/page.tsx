@@ -43,7 +43,7 @@ export default function Lista() {
           </button>
           <button
             onClick={() => limparItens()}
-            className="rounded-md bg-red-500 font-bold hover:bg-red-700 text-white"
+            className="rounded-md bg-red-500 font-bold hover:bg-purple-700 text-white"
           >
             DELETAR LISTA
           </button>
