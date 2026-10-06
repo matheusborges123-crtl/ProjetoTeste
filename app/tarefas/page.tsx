@@ -2,13 +2,29 @@
 import { useState } from "react";
 export default function Lista() {
   const [texto, setTexto] = useState("");
-  const [itens, setItens] = useState<string[]>([]);
+  const [id, setId] = useState(0);
+  const [itens, setItens] = useState<
+    {
+      id: number;
+      texto: string;
+      concluida: boolean;
+    }[]
+  >([]);
 
   function adicionarItem() {
     if (texto === "") {
       return;
     }
-    setItens([...itens, texto]);
+    setItens([
+      ...itens,
+      {
+        id: id,
+        texto: texto,
+        concluida: false,
+      },
+    ]);
+
+    setId(id + 1);
 
     setTexto("");
   }
@@ -17,10 +33,25 @@ export default function Lista() {
     setItens([]);
   }
 
-  function removerItem(item: string) {
+  function marcarConcluida(id: number) {
     setItens(
-      itens.filter((el: any) => {
-        return el !== item;
+      itens.map((el) => {
+        if (el.id === id) {
+          return {
+            ...el,
+            concluida: !el.concluida,
+          };
+        } else {
+          return el;
+        }
+      }),
+    );
+  }
+
+  function removerItem(item: number) {
+    setItens(
+      itens.filter((el) => {
+        return el.id !== item;
       }),
     );
   }
@@ -34,7 +65,7 @@ export default function Lista() {
             value={texto}
             type="text"
             className="bg-zinc-300 text-black p-4 rounded-2xl"
-            placeholder="batata"
+            placeholder="estudar"
             onChange={(e) => setTexto(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
@@ -58,18 +89,31 @@ export default function Lista() {
         </div>
         <div className="text-zinc-200 font-black text-2xl">TAREFAS:</div>
 
-        {itens.map((el, key) => {
+        {itens.map((el) => {
           return (
             <div
-              key={key}
+              key={el.id}
               className="flex items-center justify-between bg-zinc-800 rounded-xl p-4 w-full shadow-md"
             >
-              <div className="bg-black rounded-md w-20 h-20 flex justify-center items-center font-bold">
-                {el}
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => marcarConcluida(el.id)}
+                  className="w-7 h-7 rounded-md border-2 border-zinc-400 flex items-center justify-center"
+                >
+                  {el.concluida ? "✅" : ""}
+                </button>
+
+                <div
+                  className={
+                    el.concluida ? "text-white font-bold line-through" : "text-white font-bold"
+                  }
+                >
+                  {el.texto}
+                </div>
               </div>
 
               <button
-                onClick={() => removerItem(el)}
+                onClick={() => removerItem(el.id)}
                 className="bg-red-400 hover:bg-red-500 rounded-2xl px-4 py-3 font-bold"
               >
                 REMOVER TAREFA
