@@ -1,11 +1,13 @@
+import { ReactNode } from "react";
 import Caixa from "./Caixa";
 
 interface ExercicioProps {
   nome: string;
   url: string;
+  icone?:ReactNode;
 }
 
-export default function Exercicio({ nome, url }: ExercicioProps) {
+export default function Exercicio({ nome, url,icone }: ExercicioProps) {
   return (
     <Caixa>
       <a
@@ -21,6 +23,7 @@ export default function Exercicio({ nome, url }: ExercicioProps) {
           transition-all duration-200
         "
       >
+        {icone}
         {nome}
       </a>
     </Caixa>
